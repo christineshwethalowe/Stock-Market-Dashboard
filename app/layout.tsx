@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
-import { DM_Sans, DM_Mono } from "next/font/google";
+import { Hubot_Sans, DM_Mono } from "next/font/google";
 import "./globals.css";
 
-const dmSans = DM_Sans({
-  variable: "--font-dm-sans",
+const hubotSans = Hubot_Sans({
+  variable: "--font-hubot-sans",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
 });
 
 const dmMono = DM_Mono({
@@ -14,8 +15,8 @@ const dmMono = DM_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Colombo Stock Exchange Dashboard",
-  description: "A dark-themed Colombo Stock Exchange market dashboard",
+  title: "LK Stock Market Dashboard",
+  description: "A market dashboard for LK Stock Market",
 };
 
 export default function RootLayout({
@@ -26,7 +27,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${dmSans.variable} ${dmMono.variable} h-full antialiased`}
+      className={`${hubotSans.variable} ${dmMono.variable} h-full antialiased`}
     >
       <body className="min-h-full bg-[var(--background)] text-[var(--foreground)]">
         {children}

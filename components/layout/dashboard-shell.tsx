@@ -48,6 +48,8 @@ function SidebarIcon({ name }: { name: string }) {
 
 export function DashboardShell({ children, rightPanel }: DashboardShellProps) {
   const [time, setTime] = useState(() => baseClock);
+  const [activeTopNav, setActiveTopNav] = useState("Dashboard");
+  const [activeSidebarItem, setActiveSidebarItem] = useState("Dashboard");
 
   useEffect(() => {
     const timer = window.setInterval(() => {
@@ -60,19 +62,19 @@ export function DashboardShell({ children, rightPanel }: DashboardShellProps) {
   const clockLabel = useMemo(() => formatColomboTime(time), [time]);
 
   return (
-    <div className="min-h-screen text-slate-100">
-      <header className="fixed inset-x-0 top-0 z-50 h-[52px] border-b border-white/10 bg-[#0b0e14]/95 backdrop-blur-xl">
+    <div className="min-h-screen text-slate-900">
+      <header className="fixed inset-x-0 top-0 z-50 h-[52px] border-b market-separator bg-white/95 backdrop-blur-xl">
         <div className="flex h-full items-center gap-4 px-4 lg:px-5">
           <div className="flex min-w-0 items-center gap-3">
             <div className="flex h-8 w-8 items-center justify-center rounded-xl border border-blue-500/30 bg-blue-500/10 text-blue-400 shadow-[0_0_0_1px_rgba(37,99,235,0.1)]">
               <TbChartLine size={18} />
             </div>
             <div className="min-w-0">
-              <div className="truncate text-sm font-semibold tracking-[0.2em] text-slate-100">
-                CSE
+              <div className="truncate text-sm font-semibold tracking-[0.2em] text-slate-900">
+                LK STOCK MARKET
               </div>
-              <div className="-mt-0.5 text-[10px] uppercase tracking-[0.3em] text-slate-400">
-                Market Desk
+              <div className="-mt-0.5 text-[10px] uppercase tracking-[0.3em] text-slate-500">
+                Trading Desk
               </div>
             </div>
           </div>
@@ -82,69 +84,72 @@ export function DashboardShell({ children, rightPanel }: DashboardShellProps) {
               <a
                 key={item.label}
                 href={item.href}
-                className="rounded-full px-3 py-2 text-sm text-slate-300 transition-colors hover:bg-white/5 hover:text-white"
+                onClick={() => setActiveTopNav(item.label)}
+                className={`rounded-full border px-3 py-2 text-sm transition-colors ${
+                  activeTopNav === item.label
+                    ? "border-blue-300 bg-blue-100 text-blue-900 shadow-[inset_0_0_0_1px_rgba(37,99,235,0.08)]"
+                    : "border-transparent text-slate-700 hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700"
+                }`}
               >
                 {item.label}
               </a>
             ))}
           </nav>
 
-          <div className="flex items-center gap-3 text-sm text-slate-300">
-            <div className="hidden items-center gap-2 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1.5 lg:flex">
+          <div className="flex items-center gap-3 text-sm text-slate-700">
+            <div className="pill pill-positive hidden items-center gap-2 px-3 py-1.5 lg:flex">
               <span className="live-dot h-2.5 w-2.5 rounded-full bg-emerald-400 shadow-[0_0_14px_rgba(16,185,129,0.55)]" />
               <span>Live market</span>
             </div>
-            <div className="hidden items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-slate-300 xl:flex">
+            <div className="pill pill-blue hidden items-center gap-2 px-3 py-1.5 text-slate-700 xl:flex">
               <TbClockHour3 size={16} />
-              <span className="font-mono text-xs tracking-[0.24em] text-slate-100">{clockLabel}</span>
+              <span className="market-mono text-xs tracking-[0.24em] text-slate-900">{clockLabel}</span>
             </div>
           </div>
 
-          <label className="hidden flex-1 max-w-sm items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-2 text-slate-400 lg:flex">
+          <label className="hidden flex-1 max-w-sm items-center gap-2 rounded-full border border-blue-200 bg-white px-3 py-2 text-slate-500 lg:flex">
             <TbSearch size={16} />
             <input
               type="search"
               placeholder="Search symbols, companies, sectors"
-              className="w-full bg-transparent text-sm outline-none placeholder:text-slate-500"
+              className="w-full bg-transparent text-sm text-slate-800 outline-none placeholder:text-slate-400"
             />
           </label>
 
-          <button className="hidden h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 text-slate-300 transition hover:bg-white/10 hover:text-white md:inline-flex">
+          <button className="hidden h-9 w-9 items-center justify-center rounded-full border border-blue-200 bg-white text-slate-600 transition hover:bg-blue-50 hover:text-blue-700 md:inline-flex">
             <TbBell size={16} />
           </button>
-          <button className="hidden h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 text-slate-300 transition hover:bg-white/10 hover:text-white md:inline-flex">
+          <button className="hidden h-9 w-9 items-center justify-center rounded-full border border-blue-200 bg-white text-slate-600 transition hover:bg-blue-50 hover:text-blue-700 md:inline-flex">
             <TbSettings size={16} />
           </button>
 
-          <button className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 text-slate-200 lg:hidden">
+          <button className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-blue-200 bg-white text-slate-700 lg:hidden">
             <TbMenu2 size={18} />
           </button>
 
-          <button className="hidden items-center gap-2 rounded-full border border-white/10 bg-white/5 px-2 py-1.5 text-sm text-slate-100 lg:flex">
+          <button className="hidden items-center gap-2 rounded-full border border-blue-200 bg-white px-2 py-1.5 text-sm text-slate-800 lg:flex">
             <span className="flex h-7 w-7 items-center justify-center rounded-full bg-blue-500/20 text-[11px] font-semibold text-blue-200">
               AD
             </span>
-            <BiSolidChevronDown size={14} className="text-slate-400" />
+            <BiSolidChevronDown size={14} className="text-slate-500" />
           </button>
         </div>
       </header>
 
-      <div className="fixed inset-x-0 top-[52px] z-40 h-[34px] overflow-hidden border-b border-white/10 bg-[#111623]/95 backdrop-blur-xl">
+      <div className="fixed inset-x-0 top-[52px] z-40 h-[34px] overflow-hidden border-b market-separator bg-white/95 backdrop-blur-xl">
         <div className="ticker-scroll flex h-full min-w-[200%] items-center gap-6 px-4 text-[12px]">
           {[...tickerItems, ...tickerItems].map((item, index) => (
             <div
               key={`${item.symbol}-${index}`}
-              className="flex items-center gap-3 rounded-full border border-white/10 bg-white/5 px-3 py-1"
+              className="flex items-center gap-3 rounded-full border border-blue-200 bg-blue-50/70 px-3 py-1"
             >
-              <span className="font-mono font-semibold tracking-[0.18em] text-white">
+              <span className="market-mono font-semibold tracking-[0.18em] text-blue-900">
                 {item.symbol}
               </span>
-              <span className="font-mono text-slate-200">{item.price}</span>
+              <span className="market-mono text-slate-700">{item.price}</span>
               <span
-                className={`rounded-full px-2 py-0.5 font-mono text-[11px] font-semibold ${
-                  item.tone === "gain"
-                    ? "bg-emerald-500/15 text-emerald-300"
-                    : "bg-rose-500/15 text-rose-300"
+                className={`pill market-mono px-2 py-0.5 text-[11px] font-semibold ${
+                  item.tone === "gain" ? "pill-positive" : "pill-negative"
                 }`}
               >
                 {item.change}
@@ -155,7 +160,7 @@ export function DashboardShell({ children, rightPanel }: DashboardShellProps) {
       </div>
 
       <div className="pt-[86px] lg:pl-[72px] xl:pl-[220px] xl:pr-[280px]">
-        <aside className="custom-scrollbar fixed left-0 top-[86px] hidden h-[calc(100vh-86px)] w-[72px] overflow-y-auto border-r border-white/10 bg-[#0d111b]/95 px-2 py-5 lg:block xl:w-[220px] xl:px-4">
+        <aside className="custom-scrollbar fixed left-0 top-[86px] hidden h-[calc(100vh-86px)] w-[72px] overflow-y-auto border-r market-separator bg-white px-2 py-5 lg:block xl:w-[220px] xl:px-4">
           <div className="space-y-5">
             {sidebarGroups.map((group) => (
               <section key={group.title} className="space-y-2">
@@ -164,18 +169,24 @@ export function DashboardShell({ children, rightPanel }: DashboardShellProps) {
                 </h2>
                 <div className="space-y-1">
                   {group.items.map((item, index) => {
-                    const active = index === 0;
+                    const active = item === activeSidebarItem;
 
                     return (
                       <button
                         key={item}
+                        onClick={() => {
+                          setActiveSidebarItem(item);
+                          if (topNavItems.some((navItem) => navItem.label === item)) {
+                            setActiveTopNav(item);
+                          }
+                        }}
                         className={`flex w-full items-center justify-center gap-3 border-l-2 px-2 py-2 text-left transition xl:justify-start xl:px-3 ${
                           active
-                            ? "border-blue-500 bg-blue-500/10 text-white"
-                            : "border-transparent text-slate-400 hover:border-white/15 hover:bg-white/5 hover:text-slate-200"
+                            ? "border-blue-600 bg-gradient-to-r from-blue-100 to-blue-50 text-blue-900 shadow-[inset_0_0_0_1px_rgba(37,99,235,0.08)]"
+                            : "border-transparent text-slate-600 hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700"
                         }`}
                       >
-                        <span className={`rounded-lg p-1.5 ${active ? "bg-blue-500/20 text-blue-300" : "bg-white/5 text-slate-400"}`}>
+                        <span className={`rounded-lg p-1.5 ${active ? "bg-blue-100 text-blue-700" : "bg-blue-50 text-slate-500"}`}>
                           <SidebarIcon name={index === 0 ? "home" : index === 1 ? "markets" : index === 2 ? "equities" : "other"} />
                         </span>
                         <span className="hidden text-sm font-medium xl:block">{item}</span>
@@ -192,16 +203,21 @@ export function DashboardShell({ children, rightPanel }: DashboardShellProps) {
           {children}
         </main>
 
-        <aside className="custom-scrollbar fixed right-0 top-[86px] hidden h-[calc(100vh-86px)] w-[280px] overflow-y-auto border-l border-white/10 bg-[#0d111b]/95 px-4 py-5 xl:block">
+        <aside className="custom-scrollbar fixed right-0 top-[86px] hidden h-[calc(100vh-86px)] w-[280px] overflow-y-auto border-l market-separator bg-white px-4 py-5 xl:block">
           {rightPanel}
         </aside>
       </div>
 
-      <nav className="fixed inset-x-0 bottom-0 z-50 grid h-14 grid-cols-4 border-t border-white/10 bg-[#0b0e14]/96 px-2 backdrop-blur-xl md:hidden">
-        {topNavItems.slice(0, 4).map((item, index) => (
+      <nav className="fixed inset-x-0 bottom-0 z-50 grid h-14 grid-cols-4 border-t market-separator bg-white/96 px-2 backdrop-blur-xl md:hidden">
+        {topNavItems.slice(0, 4).map((item) => (
           <button
             key={item.label}
-            className={`flex flex-col items-center justify-center gap-1 text-[11px] ${index === 0 ? "text-blue-300" : "text-slate-400"}`}
+            onClick={() => setActiveTopNav(item.label)}
+            className={`flex flex-col items-center justify-center gap-1 rounded-xl border px-2 text-[11px] ${
+              activeTopNav === item.label
+                ? "border-blue-300 bg-blue-100 text-blue-800"
+                : "border-transparent text-slate-500"
+            }`}
           >
             <span className="text-base">
               <SidebarIcon name={item.icon} />
