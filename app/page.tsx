@@ -1,11 +1,5 @@
-import Image from "next/image";
+import { DashboardPage } from "@/components/dashboard/dashboard-page";
 
 export default function Home() {
-  return (
-    <main className="min-h-screen bg-black text-white p-10">
-      <h1 className="text-4xl font-bold">
-        Stock Market Dashboard
-      </h1>
-    </main>
-  );
+  return <DashboardPage />;
 }
