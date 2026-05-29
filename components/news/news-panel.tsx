@@ -4,23 +4,41 @@ interface NewsPanelProps {
   announcements: Announcement[];
 }
 
+function announcementPillTone(category: string) {
+  const normalized = category.toLowerCase();
+
+  if (normalized === "results") {
+    return "pill-positive";
+  }
+
+  if (normalized === "policy") {
+    return "pill-amber";
+  }
+
+  if (normalized === "market") {
+    return "pill-blue";
+  }
+
+  return "pill-neutral";
+}
+
 export function NewsPanel({ announcements }: NewsPanelProps) {
   return (
-    <section className="rounded-[22px] border border-white/10 bg-white/[0.04] p-4 shadow-[0_12px_32px_rgba(0,0,0,0.18)] backdrop-blur-sm">
+    <section className="market-panel rounded-[22px] p-4">
       <div className="mb-4">
-        <p className="text-xs uppercase tracking-[0.28em] text-slate-500">Latest Announcements</p>
-        <h3 className="mt-1 text-lg font-semibold text-white">News feed</h3>
+        <p className="market-eyebrow">Latest Announcements</p>
+        <h3 className="market-heading mt-1 text-lg">News feed</h3>
       </div>
       <div className="space-y-3">
         {announcements.map((announcement) => (
-          <article key={`${announcement.category}-${announcement.headline}`} className="group rounded-2xl border border-white/5 bg-white/[0.03] px-3 py-3 transition hover:border-blue-500/30 hover:bg-blue-500/8">
+          <article key={`${announcement.category}-${announcement.headline}`} className="market-subpanel group rounded-2xl px-3 py-3 transition hover:border-blue-400 hover:bg-blue-50">
             <div className="flex items-center justify-between gap-3">
-              <span className="rounded-full border border-blue-500/20 bg-blue-500/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-blue-200 transition group-hover:border-blue-400/30 group-hover:bg-blue-500/15">
+              <span className={`pill px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] transition ${announcementPillTone(announcement.category)}`}>
                 {announcement.category}
               </span>
-              <span className="text-xs text-slate-500 transition group-hover:text-slate-400">{announcement.time}</span>
+              <span className="text-xs text-slate-500 transition group-hover:text-slate-600">{announcement.time}</span>
             </div>
-            <p className="mt-2 text-sm leading-6 text-slate-200 transition group-hover:text-white">{announcement.headline}</p>
+            <p className="market-subheading mt-2 leading-6 transition group-hover:text-blue-800">{announcement.headline}</p>
           </article>
         ))}
       </div>

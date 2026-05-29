@@ -33,12 +33,12 @@ export function MarketChart({ data }: MarketChartProps) {
         <CartesianGrid stroke="rgba(148,163,184,0.12)" vertical={false} />
         <XAxis
           dataKey="label"
-          tick={{ fill: "#94a3b8", fontSize: 12 }}
-          axisLine={{ stroke: "rgba(148,163,184,0.14)" }}
+          tick={{ fill: "#475569", fontSize: 12, fontFamily: "var(--font-dm-mono), monospace" }}
+          axisLine={{ stroke: "rgba(30,58,138,0.16)" }}
           tickLine={false}
         />
         <YAxis
-          tick={{ fill: "#94a3b8", fontSize: 12 }}
+          tick={{ fill: "#475569", fontSize: 12, fontFamily: "var(--font-dm-mono), monospace" }}
           axisLine={false}
           tickLine={false}
           width={52}
@@ -46,14 +46,14 @@ export function MarketChart({ data }: MarketChartProps) {
         />
         <Tooltip
           contentStyle={{
-            background: "rgba(13,17,27,0.96)",
-            border: "1px solid rgba(148,163,184,0.18)",
+            background: "rgba(255,255,255,0.98)",
+            border: "1px solid rgba(37,99,235,0.24)",
             borderRadius: 16,
-            color: "#e2e8f0",
-            boxShadow: "0 20px 40px rgba(0,0,0,0.3)",
+            color: "#0f172a",
+            boxShadow: "0 20px 40px rgba(15,23,42,0.16)",
           }}
-          labelStyle={{ color: "#cbd5e1", fontSize: 12 }}
-          itemStyle={{ color: "#e2e8f0", fontSize: 12 }}
+          labelStyle={{ color: "#334155", fontSize: 12, fontFamily: "var(--font-dm-mono), monospace" }}
+          itemStyle={{ color: "#0f172a", fontSize: 12, fontFamily: "var(--font-dm-mono), monospace" }}
         />
         <Area
           type="monotone"
