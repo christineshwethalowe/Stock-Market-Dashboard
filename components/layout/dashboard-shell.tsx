@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import {
   TbBell,
@@ -41,15 +43,38 @@ function SidebarIcon({ name }: { name: string }) {
       return <TbChartLine size={18} />;
     case "equities":
       return <TbLayoutSidebarLeftExpand size={18} />;
+    case "alerts":
+      return <TbBell size={18} />;
     default:
       return <TbDotsVertical size={18} />;
   }
 }
 
+function getTopNavLabel(pathname: string) {
+  if (pathname === "/markets") {
+    return "Markets";
+  }
+
+  return "Dashboard";
+}
+
+function getSidebarLabel(pathname: string) {
+  if (pathname === "/markets") {
+    return "Market Breadth";
+  }
+
+  if (pathname === "/alerts") {
+    return "Alerts";
+  }
+
+  return "Dashboard";
+}
+
 export function DashboardShell({ children, rightPanel }: DashboardShellProps) {
   const [time, setTime] = useState(() => baseClock);
-  const [activeTopNav, setActiveTopNav] = useState("Dashboard");
-  const [activeSidebarItem, setActiveSidebarItem] = useState("Dashboard");
+  const pathname = usePathname();
+  const activeTopNav = getTopNavLabel(pathname);
+  const activeSidebarItem = getSidebarLabel(pathname);
 
   useEffect(() => {
     const timer = window.setInterval(() => {
@@ -81,18 +106,31 @@ export function DashboardShell({ children, rightPanel }: DashboardShellProps) {
 
           <nav className="hidden flex-1 items-center gap-1 xl:flex">
             {topNavItems.map((item) => (
-              <a
-                key={item.label}
-                href={item.href}
-                onClick={() => setActiveTopNav(item.label)}
-                className={`rounded-full border px-3 py-2 text-sm transition-colors ${
-                  activeTopNav === item.label
-                    ? "border-blue-300 bg-blue-100 text-blue-900 shadow-[inset_0_0_0_1px_rgba(37,99,235,0.08)]"
-                    : "border-transparent text-slate-700 hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700"
-                }`}
-              >
-                {item.label}
-              </a>
+              item.href.startsWith("/") ? (
+                <Link
+                  key={item.label}
+                  href={item.href}
+                  className={`rounded-full border px-3 py-2 text-sm transition-colors ${
+                    activeTopNav === item.label
+                      ? "border-blue-300 bg-blue-100 text-blue-900 shadow-[inset_0_0_0_1px_rgba(37,99,235,0.08)]"
+                      : "border-transparent text-slate-700 hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700"
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              ) : (
+                <a
+                  key={item.label}
+                  href={item.href}
+                  className={`rounded-full border px-3 py-2 text-sm transition-colors ${
+                    activeTopNav === item.label
+                      ? "border-blue-300 bg-blue-100 text-blue-900 shadow-[inset_0_0_0_1px_rgba(37,99,235,0.08)]"
+                      : "border-transparent text-slate-700 hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700"
+                  }`}
+                >
+                  {item.label}
+                </a>
+              )
             ))}
           </nav>
 
@@ -170,27 +208,46 @@ export function DashboardShell({ children, rightPanel }: DashboardShellProps) {
                 <div className="space-y-1">
                   {group.items.map((item, index) => {
                     const active = item === activeSidebarItem;
+                    const destination =
+                      item === "Dashboard"
+                        ? "/"
+                        : item === "Market Breadth"
+                          ? "/markets"
+                          : item === "Alerts"
+                            ? "/alerts"
+                            : null;
 
                     return (
-                      <button
-                        key={item}
-                        onClick={() => {
-                          setActiveSidebarItem(item);
-                          if (topNavItems.some((navItem) => navItem.label === item)) {
-                            setActiveTopNav(item);
-                          }
-                        }}
-                        className={`flex w-full items-center justify-center gap-3 border-l-2 px-2 py-2 text-left transition xl:justify-start xl:px-3 ${
-                          active
-                            ? "border-blue-600 bg-gradient-to-r from-blue-100 to-blue-50 text-blue-900 shadow-[inset_0_0_0_1px_rgba(37,99,235,0.08)]"
-                            : "border-transparent text-slate-600 hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700"
-                        }`}
-                      >
-                        <span className={`rounded-lg p-1.5 ${active ? "bg-blue-100 text-blue-700" : "bg-blue-50 text-slate-500"}`}>
-                          <SidebarIcon name={index === 0 ? "home" : index === 1 ? "markets" : index === 2 ? "equities" : "other"} />
-                        </span>
-                        <span className="hidden text-sm font-medium xl:block">{item}</span>
-                      </button>
+                      destination ? (
+                        <Link
+                          key={item}
+                          href={destination}
+                          className={`flex w-full items-center justify-center gap-3 border-l-2 px-2 py-2 text-left transition xl:justify-start xl:px-3 ${
+                            active
+                              ? "border-blue-600 bg-gradient-to-r from-blue-100 to-blue-50 text-blue-900 shadow-[inset_0_0_0_1px_rgba(37,99,235,0.08)]"
+                              : "border-transparent text-slate-600 hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700"
+                          }`}
+                        >
+                          <span className={`rounded-lg p-1.5 ${active ? "bg-blue-100 text-blue-700" : "bg-blue-50 text-slate-500"}`}>
+                            <SidebarIcon name={item === "Dashboard" ? "home" : item === "Market Breadth" ? "markets" : item === "Alerts" ? "alerts" : index === 2 ? "equities" : "other"} />
+                          </span>
+                          <span className="hidden text-sm font-medium xl:block">{item}</span>
+                        </Link>
+                      ) : (
+                        <button
+                          key={item}
+                          className={`flex w-full items-center justify-center gap-3 border-l-2 px-2 py-2 text-left transition xl:justify-start xl:px-3 ${
+                            active
+                              ? "border-blue-600 bg-gradient-to-r from-blue-100 to-blue-50 text-blue-900 shadow-[inset_0_0_0_1px_rgba(37,99,235,0.08)]"
+                              : "border-transparent text-slate-600 hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700"
+                          }`}
+                        >
+                          <span className={`rounded-lg p-1.5 ${active ? "bg-blue-100 text-blue-700" : "bg-blue-50 text-slate-500"}`}>
+                            <SidebarIcon name={item === "Dashboard" ? "home" : item === "Market Breadth" ? "markets" : item === "Alerts" ? "alerts" : index === 2 ? "equities" : "other"} />
+                          </span>
+                          <span className="hidden text-sm font-medium xl:block">{item}</span>
+                        </button>
+                      )
                     );
                   })}
                 </div>
@@ -210,20 +267,37 @@ export function DashboardShell({ children, rightPanel }: DashboardShellProps) {
 
       <nav className="fixed inset-x-0 bottom-0 z-50 grid h-14 grid-cols-4 border-t market-separator bg-white/96 px-2 backdrop-blur-xl md:hidden">
         {topNavItems.slice(0, 4).map((item) => (
-          <button
-            key={item.label}
-            onClick={() => setActiveTopNav(item.label)}
-            className={`flex flex-col items-center justify-center gap-1 rounded-xl border px-2 text-[11px] ${
-              activeTopNav === item.label
-                ? "border-blue-300 bg-blue-100 text-blue-800"
-                : "border-transparent text-slate-500"
-            }`}
-          >
-            <span className="text-base">
-              <SidebarIcon name={item.icon} />
-            </span>
-            <span>{item.label}</span>
-          </button>
+          item.href.startsWith("/") ? (
+            <Link
+              key={item.label}
+              href={item.href}
+              className={`flex flex-col items-center justify-center gap-1 rounded-xl border px-2 text-[11px] ${
+                activeTopNav === item.label
+                  ? "border-blue-300 bg-blue-100 text-blue-800"
+                  : "border-transparent text-slate-500"
+              }`}
+            >
+              <span className="text-base">
+                <SidebarIcon name={item.icon} />
+              </span>
+              <span>{item.label}</span>
+            </Link>
+          ) : (
+            <a
+              key={item.label}
+              href={item.href}
+              className={`flex flex-col items-center justify-center gap-1 rounded-xl border px-2 text-[11px] ${
+                activeTopNav === item.label
+                  ? "border-blue-300 bg-blue-100 text-blue-800"
+                  : "border-transparent text-slate-500"
+              }`}
+            >
+              <span className="text-base">
+                <SidebarIcon name={item.icon} />
+              </span>
+              <span>{item.label}</span>
+            </a>
+          )
         ))}
       </nav>
     </div>
