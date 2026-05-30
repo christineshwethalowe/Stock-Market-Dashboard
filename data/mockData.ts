@@ -11,8 +11,8 @@ import {
 } from "@/types/market";
 
 export const topNavItems: NavItem[] = [
-  { label: "Dashboard", href: "#dashboard", icon: "home" },
-  { label: "Markets", href: "#markets", icon: "markets" },
+  { label: "Dashboard", href: "/", icon: "home" },
+  { label: "Markets", href: "/markets", icon: "markets" },
   { label: "Equities", href: "#equities", icon: "equities" },
   { label: "Derivatives", href: "#derivatives", icon: "derivatives" },
   { label: "Bonds", href: "#bonds", icon: "bonds" },
